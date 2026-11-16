@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>TeamNest | Home</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --canvas: #0c1421;
+      --surface: #121e2d;
+      --surface-raised: #172536;
+      --line: #29394a;
+      --ink: #edf4f6;
+      --muted: #9aabba;
+      --teal: #55c5ad;
+      --teal-dark: #143b3a;
+      --indigo: #a7b3ff;
+      --amber: #f0c77b;
+      --shadow: 0 16px 38px rgba(0, 0, 0, .2);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font: 14px/1.5 "Segoe UI", Arial, sans-serif; }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid rgba(85, 197, 173, .45); outline-offset: 2px; }
+    .topbar { align-items: center; background: #101a28; border-bottom: 1px solid var(--line); display: flex; gap: 24px; justify-content: space-between; min-height: 72px; padding: 0 clamp(18px, 4vw, 58px); position: sticky; top: 0; z-index: 5; }
+    .brand { align-items: center; color: var(--ink); display: inline-flex; font-size: 19px; font-weight: 800; gap: 10px; letter-spacing: -.5px; text-decoration: none; }
+    .brand-mark { align-items: center; background: var(--teal); border-radius: 11px 11px 11px 3px; color: #0b2827; display: inline-flex; font-size: 15px; height: 33px; justify-content: center; width: 33px; }
+    .top-note { color: var(--muted); font-size: 13px; margin-right: auto; }
+    .top-actions, .main-nav { align-items: center; display: flex; gap: 10px; }
+    .nav-link, .profile-link { border: 1px solid transparent; border-radius: 10px; color: var(--muted); padding: 9px 12px; text-decoration: none; }
+    .nav-link:hover, .nav-link.active, .profile-link:hover { background: var(--surface-raised); border-color: var(--line); color: var(--ink); }
+    .profile-link { align-items: center; border-color: var(--line); display: flex; gap: 9px; }
+    .avatar { align-items: center; background: #31475b; border: 1px solid #53687a; border-radius: 50%; color: #f0f7f8; display: inline-flex; flex: 0 0 34px; font-size: 11px; font-weight: 800; height: 34px; justify-content: center; width: 34px; }
+    .profile-copy { font-size: 12px; font-weight: 700; line-height: 1.25; }
+    .profile-copy small { color: var(--muted); display: block; font-size: 10px; font-weight: 500; }
+    main { margin: 0 auto; max-width: 1440px; padding: 30px clamp(16px, 4vw, 56px) 60px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .layout { display: grid; gap: 22px; grid-template-columns: 230px minmax(0, 1fr); }
+    .panel, .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+    .sidebar { align-self: start; padding: 20px; }
+    .eyebrow { color: var(--teal); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; margin: 0 0 7px; text-transform: uppercase; }
+    .sidebar h2 { font-size: 15px; margin: 0 0 14px; }
+    .course-list { display: grid; gap: 7px; }
+    .course-link { border-radius: 10px; color: var(--muted); display: block; font-size: 12px; padding: 10px; text-decoration: none; }
+    .course-link.active, .course-link:hover { background: var(--teal-dark); color: #b7f0e2; }
+    .side-note { border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; margin: 18px 0 0; padding-top: 14px; }
+    .content { display: grid; gap: 20px; min-width: 0; }
+    .welcome { background: radial-gradient(circle at 88% 20%, rgba(85,197,173,.14), transparent 30%), linear-gradient(120deg, #172b3a, #172537 66%, #202b42); border: 1px solid #34515b; border-radius: 20px; min-height: 190px; overflow: hidden; padding: clamp(24px, 4vw, 40px); position: relative; }
+    .welcome::after { border: 1px solid rgba(85,197,173,.18); border-radius: 50%; content: ""; height: 260px; position: absolute; right: 5%; top: -110px; width: 260px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(27px, 3vw, 38px); letter-spacing: -1px; line-height: 1.15; margin-bottom: 9px; max-width: 620px; }
+    h2 { font-size: 19px; letter-spacing: -.3px; margin-bottom: 4px; }
+    h3 { font-size: 14px; margin-bottom: 5px; }
+    .welcome p:last-child { color: #b1c2cb; margin-bottom: 0; max-width: 610px; }
+    .section-heading { align-items: end; display: flex; gap: 16px; justify-content: space-between; }
+    .section-heading p { color: var(--muted); font-size: 12px; margin: 3px 0 0; }
+    .count { color: var(--muted); font-size: 12px; }
+    .project-grid { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .project-card { background: var(--surface); border: 1px solid var(--line); border-radius: 15px; color: var(--ink); display: flex; flex-direction: column; min-height: 235px; padding: 18px; text-decoration: none; transition: border-color .15s, transform .15s; }
+    .project-card:hover { border-color: #4a837d; transform: translateY(-2px); }
+    .project-top { align-items: center; display: flex; justify-content: space-between; margin-bottom: 16px; }
+    .project-badge { align-items: center; background: #203d4b; border-radius: 10px; color: #b6ecdf; display: inline-flex; font-size: 11px; font-weight: 800; height: 36px; justify-content: center; width: 36px; }
+    .status, .tag { border-radius: 99px; display: inline-flex; font-size: 10px; font-weight: 750; padding: 4px 8px; }
+    .status.active { background: #173c38; color: #93e4cf; }
+    .status.upcoming { background: #44351e; color: #f3d49a; }
+    .project-card > p { color: var(--muted); font-size: 12px; margin-bottom: 13px; }
+    .project-meta { color: var(--muted); font-size: 11px; margin-bottom: 15px; }
+    .progress { background: #263749; border-radius: 99px; height: 6px; margin-bottom: 6px; overflow: hidden; }
+    .progress span { background: var(--teal); border-radius: inherit; display: block; height: 100%; }
+    .progress-label { color: var(--muted); font-size: 10px; }
+    .project-action { border-top: 1px solid var(--line); color: #8be0cb; display: flex; font-size: 11px; font-weight: 750; justify-content: space-between; margin-top: auto; padding-top: 13px; }
+    .people-preview { padding: 19px; }
+    .people-preview .section-heading { margin-bottom: 14px; }
+    .people-list { display: grid; gap: 9px; }
+    .person-row { align-items: center; background: #101a27; border: 1px solid #263749; border-radius: 12px; display: grid; gap: 12px; grid-template-columns: repeat(5, minmax(0, 1fr)); min-width: 0; padding: 12px; }
+    .person-row .invite-button { grid-column: 1 / -1; justify-self: end; min-width: 88px; }
+    .person-name { align-items: center; display: flex; gap: 10px; min-width: 0; }
+    .person-name strong { display: block; font-size: 12px; }
+    .person-name small, .detail small { color: var(--muted); display: block; font-size: 10px; }
+    .detail { font-size: 11px; min-width: 0; }
+    .detail small { font-size: 9px; letter-spacing: .5px; margin-bottom: 2px; text-transform: uppercase; }
+    .detail span { display: block; overflow-wrap: anywhere; }
+    .button, .button-secondary, .icon-button { align-items: center; border: 1px solid transparent; border-radius: 9px; cursor: pointer; display: inline-flex; font-size: 11px; font-weight: 750; justify-content: center; min-height: 35px; padding: 0 12px; text-decoration: none; }
+    .button { background: var(--teal); color: #102a2a; }
+    .button:hover { background: #76d9c2; }
+    .button-secondary { background: #1b2a3a; border-color: var(--line); color: var(--ink); }
+    .button-secondary:hover { border-color: #55707d; }
+    .profile-layout { display: grid; gap: 20px; grid-template-columns: minmax(220px, .7fr) minmax(0, 1.5fr); }
+    .profile-intro, .profile-form { padding: clamp(20px, 3vw, 32px); }
+    .profile-intro p:not(.eyebrow) { color: var(--muted); font-size: 13px; }
+    .field-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .field { display: grid; gap: 6px; }
+    .field label { font-size: 11px; font-weight: 700; }
+    .field input, .search-input { background: #0e1825; border: 1px solid #344556; border-radius: 9px; color: var(--ink); min-height: 40px; padding: 9px 11px; width: 100%; }
+    .field-hint { color: var(--muted); font-size: 10px; margin: 0; }
+    .privacy-note { background: #172c35; border: 1px solid #294d4b; border-radius: 11px; color: #c4e6de; font-size: 11px; margin: 18px 0; padding: 12px; }
+    .form-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .people-tools { align-items: center; display: flex; gap: 12px; justify-content: space-between; margin: 16px 0; }
+    .people-tools .search-input { max-width: 340px; }
+    .people-tools p { color: var(--muted); font-size: 11px; margin: 0; }
+    .gpa { color: #b7f0e2; font-weight: 700; }
+    .toast { background: #172a33; border: 1px solid #3c7268; border-radius: 11px; bottom: 20px; box-shadow: var(--shadow); color: var(--ink); display: none; font-size: 12px; max-width: min(420px, calc(100vw - 32px)); padding: 12px 15px; position: fixed; right: 20px; z-index: 20; }
+    .toast.show { display: block; }
+    @media (max-width: 1050px) { .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .person-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } .person-name, .person-row .invite-button { grid-column: 1 / -1; } }
+    @media (max-width: 760px) { .topbar { flex-wrap: wrap; gap: 5px 12px; padding-bottom: 9px; padding-top: 9px; } .top-note { display: none; } .main-nav { order: 3; width: 100%; } .nav-link { flex: 1; text-align: center; } main { padding-top: 20px; } .layout, .profile-layout { grid-template-columns: 1fr; } .sidebar { padding: 15px; } .course-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } .side-note { display: none; } }
+    @media (max-width: 560px) { .topbar { min-height: 62px; } .profile-copy { display: none; } .project-grid { grid-template-columns: 1fr; } .person-row { align-items: start; grid-template-columns: repeat(2, minmax(0, 1fr)); } .person-name { grid-column: 1 / -1; } .field-grid { grid-template-columns: 1fr; } .people-tools { align-items: stretch; flex-direction: column; } .people-tools .search-input { max-width: none; } .course-list { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="home.html#home" aria-label="TeamNest home"><span class="brand-mark" aria-hidden="true">tn</span><span>teamnest</span></a>
+    <span class="top-note">Plan together, at a pace that works for everyone.</span>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-link" href="#home" data-page="home">Home</a>
+      <a class="nav-link" href="#people" data-page="people">People</a>
+    </nav>
+    <div class="top-actions">
+      <a class="profile-link" href="#profile" aria-label="Open profile settings"><span class="avatar">MC</span><span class="profile-copy">Maya Chen<small>My profile</small></span></a>
+    </div>
+  </header>
+  <main>
+    <section class="page" id="home" aria-labelledby="home-title">
+      <div class="layout">
+        <aside class="panel sidebar" aria-label="Course navigation">
+          <p class="eyebrow">Workspace</p>
+          <h2>Your courses</h2>
+          <nav class="course-list" aria-label="Courses">
+            <a class="course-link active" href="#home">EE6821 · Embedded Systems</a>
+            <a class="course-link" href="#people">CS3403 · Database Systems</a>
+            <a class="course-link" href="#people">EE3071 · Product Design</a>
+          </nav>
+          <p class="side-note">Course links are examples in this prototype. Your project updates stay in one shared space.</p>
+        </aside>
+        <div class="content">
+          <section class="welcome">
+            <p class="eyebrow">Welcome back</p>
+            <h1 id="home-title">Hi Maya, here's what's happening in your courses.</h1>
+            <p>Pick up where your team left off, see the latest shared decisions, or meet students with skills that fit your next project.</p>
+          </section>
+          <div class="section-heading">
+            <div><h2>Projects in progress</h2><p>Your active and upcoming course projects</p></div>
+            <span class="count">3 projects</span>
+          </div>
+          <div class="project-grid">
+            <a class="project-card" href="project-panel.html">
+              <span class="project-top"><span class="project-badge">EE</span><span class="status active">In progress</span></span>
+              <h3>Smart greenhouse monitor</h3><p>EE6821 · Embedded Systems Design</p>
+              <div class="project-meta">Team 07 · 4 members · Due 20 Nov 2026</div>
+              <div class="progress" aria-label="67 percent complete"><span style="width:67%"></span></div>
+              <div class="progress-label">8 of 12 tasks submitted · 67%</div>
+              <span class="project-action">Open project workspace <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="project-card" href="#people">
+              <span class="project-top"><span class="project-badge">CS</span><span class="status upcoming">Team forming</span></span>
+              <h3>Library management system</h3><p>CS3403 · Database Systems</p>
+              <div class="project-meta">Looking for teammates · Due 8 Dec 2026</div>
+              <div class="progress" aria-label="10 percent complete"><span style="width:10%"></span></div>
+              <div class="progress-label">Proposal stage · 10%</div>
+              <span class="project-action">Find teammates <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="project-card" href="#people">
+              <span class="project-top"><span class="project-badge">PD</span><span class="status upcoming">Upcoming</span></span>
+              <h3>Modular desk organiser</h3><p>EE3071 · Product Design</p>
+              <div class="project-meta">Team 03 · 3 members · Due 15 Dec 2026</div>
+              <div class="progress" aria-label="20 percent complete"><span style="width:20%"></span></div>
+              <div class="progress-label">Planning stage · 20%</div>
+              <span class="project-action">View course people <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+          <section class="card people-preview" aria-labelledby="suggested-title">
+            <div class="section-heading"><div><h2 id="suggested-title">People in your course</h2><p>Explore skills and availability before you reach out.</p></div><a class="button-secondary" href="#people">Browse people</a></div>
+            <div class="people-list" id="home-people-list"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="people" aria-labelledby="people-title">
+      <div class="welcome" style="margin-bottom:20px">
+        <p class="eyebrow">EE6821 · Embedded Systems Design</p>
+        <h1 id="people-title">Find teammates who fit the work.</h1>
+        <p>Compare interests, skills, and weekly availability. Invite someone with a low-pressure message when you are ready.</p>
+      </div>
+      <div class="card people-preview">
+        <div class="section-heading"><div><h2>People</h2><p>Student profiles shared for team formation</p></div><span class="count">5 students</span></div>
+        <div class="people-tools"><input class="search-input" id="people-search" type="search" placeholder="Search by name, major, or skill" aria-label="Search people"><p>GPA is only shown when a student chooses to share it.</p></div>
+        <div class="people-list" id="people-list"></div>
+      </div>
+    </section>
+
+    <section class="page" id="profile" aria-labelledby="profile-title">
+      <div class="profile-layout">
+        <aside class="panel profile-intro">
+          <p class="eyebrow">Your profile</p><h1 id="profile-title">Help your teammates find you.</h1>
+          <p>Share what you want to work on, when you are available, and the skills you would like to bring to a team.</p>
+          <div class="privacy-note">Your GPA is optional. Leave it blank to keep it private; it will not appear on your public profile.</div>
+          <a class="button-secondary" href="#home">Back to home</a>
+        </aside>
+        <form class="panel profile-form" id="profile-form" novalidate>
+          <p class="eyebrow">Profile details</p>
+          <div class="field-grid">
+            <div class="field"><label for="profile-name">Name</label><input id="profile-name" name="name" value="Maya Chen" required></div>
+            <div class="field"><label for="profile-major">Major</label><input id="profile-major" name="major" value="Computer Engineering" required></div>
+            <div class="field"><label for="profile-skills">Skills</label><input id="profile-skills" name="skills" value="Python, embedded C, testing" required></div>
+            <div class="field"><label for="profile-availability">Time available each week</label><input id="profile-availability" name="availability" value="6–8 hours" required></div>
+            <div class="field"><label for="profile-gpa">GPA <span class="count">(Optional)</span></label><input id="profile-gpa" name="gpa" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Leave blank to keep private" aria-describedby="gpa-hint"><p class="field-hint" id="gpa-hint">Use your institution's scale. Only shared if you enter a value.</p></div>
+          </div>
+          <div class="form-actions"><button class="button" type="submit">Save profile</button><a class="button-secondary" href="#home">Cancel</a></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    const students = [
+      { name: "Maya Chen", initials: "MC", major: "Computer Engineering", skills: "Python · embedded C · testing", availability: "6–8 hrs / week", gpa: "", isSelf: true },
+      { name: "Arjun Patel", initials: "AP", major: "Electrical Engineering", skills: "Firmware · C · testing", availability: "8 hrs / week", gpa: "3.8" },
+      { name: "Sofia Nguyen", initials: "SN", major: "Electrical Engineering", skills: "Arduino · CAD · documentation", availability: "10 hrs / week", gpa: "" },
+      { name: "Ethan Brooks", initials: "EB", major: "Mechanical Engineering", skills: "3D printing · sensors · CAD", availability: "5 hrs / week", gpa: "3.5" },
+      { name: "Leah Morgan", initials: "LM", major: "Computer Engineering", skills: "Firmware · testing · UX", availability: "7 hrs / week", gpa: "" }
+    ];
+    const toast = document.getElementById("toast");
+    let toastTimer;
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+    function personMarkup(person, invite = false) {
+      const gpaDetail = person.gpa ? `<div class="detail"><small>GPA</small><span class="gpa">${escapeHtml(person.gpa)}</span></div>` : "";
+      const initials = person.name.split(/\s+/).map(part => part[0] || "").join("").slice(0, 2).toUpperCase();
+      const subtitle = person.isSelf ? "Your profile" : "Looking for a team";
+      return `<article class="person-row">
+        <div class="person-name"><span class="avatar" aria-hidden="true">${escapeHtml(initials)}</span><div><strong>${escapeHtml(person.name)}</strong><small>${subtitle}</small></div></div>
+        <div class="detail"><small>Major</small><span>${escapeHtml(person.major)}</span></div>
+        <div class="detail"><small>Skills</small><span>${escapeHtml(person.skills)}</span></div>
+        <div class="detail"><small>Availability</small><span>${escapeHtml(person.availability)}</span></div>
+        ${gpaDetail}
+        ${invite && !person.isSelf ? `<button class="button-secondary invite-button" type="button" data-name="${escapeHtml(person.name)}">Invite</button>` : ""}
+      </article>`;
+    }
+    function renderPeople(query = "") {
+      const normalized = query.trim().toLowerCase();
+      const matches = students.filter(person => `${person.name} ${person.major} ${person.skills}`.toLowerCase().includes(normalized));
+      const markup = matches.length ? matches.map(person => personMarkup(person, true)).join("") : `<p class="side-note">No people match that search. Try another name, major, or skill.</p>`;
+      document.getElementById("people-list").innerHTML = markup;
+      document.getElementById("home-people-list").innerHTML = students.filter(person => !person.isSelf).slice(0, 2).map(person => personMarkup(person)).join("");
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+    function showPage() {
+      const requested = location.hash.slice(1);
+      const page = ["home", "people", "profile"].includes(requested) ? requested : "home";
+      document.querySelectorAll(".page").forEach(section => section.classList.toggle("active", section.id === page));
+      document.querySelectorAll("[data-page]").forEach(link => link.classList.toggle("active", link.dataset.page === page));
+      window.scrollTo(0, 0);
+    }
+    renderPeople();
+    showPage();
+    window.addEventListener("hashchange", showPage);
+    document.getElementById("people-search").addEventListener("input", event => renderPeople(event.target.value));
+    document.addEventListener("click", event => {
+      const button = event.target.closest(".invite-button");
+      if (button) showToast(`Invitation to ${button.dataset.name} is ready to review.`);
+    });
+    document.getElementById("profile-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const name = form.elements.name.value.trim();
+      const major = form.elements.major.value.trim();
+      const skills = form.elements.skills.value.trim();
+      const availability = form.elements.availability.value.trim();
+      const gpaInput = form.elements.gpa;
+      const gpa = gpaInput.value.trim();
+      if (!name || !major || !skills || !availability || (gpa && (!Number.isFinite(Number(gpa)) || Number(gpa) < 0))) {
+        showToast("Check the required fields. GPA must be a non-negative number or left blank.");
+        (form.querySelector(":invalid") || form.elements.name).focus();
+        return;
+      }
+      const currentUser = students.find(person => person.isSelf);
+      currentUser.name = name;
+      currentUser.initials = name.split(/\s+/).map(part => part[0] || "").join("").slice(0, 2).toUpperCase();
+      currentUser.major = major;
+      currentUser.skills = skills;
+      currentUser.availability = availability;
+      currentUser.gpa = gpa;
+      document.querySelectorAll(".profile-link .avatar").forEach(avatar => { avatar.textContent = currentUser.initials; });
+      document.querySelectorAll(".profile-copy").forEach(copy => { copy.firstChild.textContent = name; });
+      renderPeople(document.getElementById("people-search").value);
+      showToast("Profile saved. Your GPA stays private unless you enter a value.");
+      location.hash = "home";
+    });
+  </script>
+</body>
+</html>
